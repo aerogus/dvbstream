@@ -18,7 +18,7 @@ restreindre la plage d'ip multicast à la boucle locale (à faire avant de lance
 ip route add 239.255.0.0/24 dev lo src 127.0.0.1
 ```
 
-avec dbblast:
+avec `dvblast`:
 
 - `--ttl 0` ne marche pas.
 - `/ifindex=1` ne marche pas
