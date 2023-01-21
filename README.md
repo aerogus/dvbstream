@@ -35,7 +35,14 @@ default via 192.168.1.1 dev eth0 src 192.168.1.74 metric 202
 
 ### mumudvb
 
-A tester
+Installation
+
+```bash
+$ apt install mumudvb
+```
+
+Marche mieux que `dvblast` ? 
+A finir de convertir les .conf
 
 ### dvblast
 
