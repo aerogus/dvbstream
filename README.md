@@ -41,8 +41,16 @@ Installation
 $ apt install mumudvb
 ```
 
+Ajouter le nouvel utilisateur `_mumudvb` au groupe `video`
+
+```bash
+usermod -a -G video _mumudvb
+```
+
 Marche mieux que `dvblast` ? 
-A finir de convertir les .conf
+
+avec `autoconfiguration=full` ça marche mais l'ensemble des service_id flood le réseau ...
+si pids est précisé et autoconfiguration à 0, ça ne floode plus ? mais maintenance des pids à faire ...
 
 ### dvblast
 
@@ -85,21 +93,22 @@ $ ffmpeg 2>&1 | head -1
 ffmpeg version 4.3.4-0+deb11u1+rpt3 Copyright (c) 2000-2021 the FFmpeg developers
 ```
 
-### captation.php
 
-Outil dédié de lecture sur l'entrée standard et nommage + découpe à l'heure du fichier
+## Enregistrer local
 
-Installation des dépendances
+avec ffmpeg
 
 ```bash
-apt install php8.0-cli php8.0-xml php8.0-curl php8.0-mbstring
-+ composer
+ffmpeg -i rtp://239.255.0.83:1234 -c copy rec.ts
 ```
 
-enregistrer localement à partir du raspberry
+avec multicat (dépendance bitstram, se compile facilement)
 
-```
-ffmpeg -i rtp://239.255.0.83:1234 -c copy /mnt/magnetoscope/hevc-83c.ts
+- https://github.com/videolan/multicat
+- https://github.com/videolan/bitstream
+
+```bash
+multicat 239.0.0.83@1234 -X /dev/null > rec.ts
 ```
 
 ## Divers
@@ -113,4 +122,3 @@ ffmpeg -i rtp://239.255.0.83:1234 -c copy /mnt/magnetoscope/hevc-83c.ts
 - https://aerogus.net/posts/diffuser-tele-radio-reseau-local/
 - https://www.hospitableit.com/howto/streaming-dvb-t-over-an-ip-network-using-mumudvb-on-a-raspberry-pi-3/
 - https://chiliproject.tetaneutral.net/projects/tetaneutral/wiki/Streaming_de_cha%C3%AEnes_TNT_sur_un_r%C3%A9seau_local
-
