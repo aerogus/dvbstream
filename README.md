@@ -1,10 +1,12 @@
-# captation-tnt
+# dvbstream
 
-Projet: capter localement la TNT avec un Raspberry Pi muni d'un tuner DVB-T + DVB-T2 (Pi-hat)
+Projet: capter localement la télévision TNT avec une Raspberry Pi munie du ([tuner DVB-T2 TV HAT](https://www.raspberrypi.com/products/raspberry-pi-tv-hat/))
+
+Test avec 2 outils: `dvblast` et `mumudvb`
 
 ## Multiplex
 
-Dans le répertoire `mux` se trouvent la configuration des multiplex disponibles sur Paris avec leur adresse de diffusion multicast.
+Dans les répertoires `conf/dvblast` et `conf/mumudvb` se trouvent la configuration des multiplex disponibles sur Paris avec leur adresse de diffusion multicast.
 
 ## Monitoring réseau
 
@@ -19,7 +21,7 @@ $ apt install iptraf
 On va restreindre la plage d'ip multicast à la boucle locale pour ne pas innonder le réseau si les switchs sont mal configurés. À faire avant de jouer avec le multicast.
 
 ```bash
-$ ip route add 239.255.0.0/24 dev lo src 127.0.0.1
+$ ip route add 239.0.0.0/24 dev lo src 127.0.0.1
 ```
 
 Pour vérifier les routes
@@ -28,29 +30,10 @@ Pour vérifier les routes
 $ ip route show
 default via 192.168.1.1 dev eth0 src 192.168.1.74 metric 202
 192.168.1.0/24 dev eth0 proto dhcp scope link src 192.168.1.74 metric 202
-239.255.0.0/24 dev lo scope link src 127.0.0.1
+239.0.0.0/24 dev lo scope link src 127.0.0.1
 ```
 
 ## Applicatifs
-
-### mumudvb
-
-Installation
-
-```bash
-$ apt install mumudvb
-```
-
-Ajouter le nouvel utilisateur `_mumudvb` au groupe `video`
-
-```bash
-usermod -a -G video _mumudvb
-```
-
-Marche mieux que `dvblast` ? 
-
-avec `autoconfiguration=full` ça marche mais l'ensemble des service_id flood le réseau ...
-si pids est précisé et autoconfiguration à 0, ça ne floode plus ? mais maintenance des pids à faire ...
 
 ### dvblast
 
@@ -71,10 +54,30 @@ DVBlast 3.4 (release)
 
 Notes avec `dvblast`:
 
+- rtp par défaut
 - `--ttl 0` ne marche pas.
 - `/ifindex=1` ne marche pas
 - `/ifaddr=127.0.0.1` ne marche pas
-- BUG avec le multicast
+- BUG avec le multicast ? (flood le réseau)
+
+### mumudvb
+
+Installation
+
+```bash
+$ apt install mumudvb
+```
+
+Ajouter le nouvel utilisateur `_mumudvb` au groupe `video`
+
+```bash
+usermod -a -G video _mumudvb
+```
+
+Marche mieux que `dvblast` ? 
+
+avec `autoconfiguration=full` ça marche mais l'ensemble des service_id flood le réseau ...
+si pids est précisé et autoconfiguration à 0, ça ne floode plus ? mais maintenance des pids à faire ...
 
 ### ffmpeg
 
@@ -93,13 +96,12 @@ $ ffmpeg 2>&1 | head -1
 ffmpeg version 4.3.4-0+deb11u1+rpt3 Copyright (c) 2000-2021 the FFmpeg developers
 ```
 
-
-## Enregistrer local
+## Enregistrer localement
 
 avec ffmpeg
 
 ```bash
-ffmpeg -i rtp://239.255.0.83:1234 -c copy rec.ts
+ffmpeg -i rtp://239.0.0.83:1234 -c copy rec.ts
 ```
 
 avec multicat (dépendance bitstram, se compile facilement)
