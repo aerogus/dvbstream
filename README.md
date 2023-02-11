@@ -1,16 +1,16 @@
 # dvbstream
 
-Projet: capter localement la télévision TNT avec une Raspberry Pi munie du ([tuner DVB-T2 TV HAT](https://www.raspberrypi.com/products/raspberry-pi-tv-hat/))
+Objectif: capter localement la télévision TNT avec une Raspberry Pi munie du ([tuner DVB-T2 TV HAT](https://www.raspberrypi.com/products/raspberry-pi-tv-hat/))
 
 Test avec 2 outils: `dvblast` et `mumudvb`
 
 ## Multiplex
 
-Dans les répertoires `conf/dvblast` et `conf/mumudvb` se trouvent la configuration des multiplex disponibles sur Paris avec leur adresse de diffusion multicast.
+Dans les répertoires `conf/dvblast` et `conf/mumudvb` se trouvent la configuration des multiplex disponibles sur Paris avec une adresse de diffusion multicast pour chaque chaîne.
 
 ## Monitoring réseau
 
-L'outil `iptraf` permet d'avoir une vue d'ensemble du trafic réseau. Utile pour débuguer le multicast :)
+L'outil `iptraf` permet d'avoir une vue d'ensemble du trafic réseau.
 
 ```bash
 $ apt install iptraf
@@ -18,13 +18,24 @@ $ apt install iptraf
 
 ## Configuration réseau
 
-On va restreindre la plage d'ip multicast à la boucle locale pour ne pas innonder le réseau si les switchs sont mal configurés. À faire avant de jouer avec le multicast.
+On va d'abord restreindre la plage d'ip multicast à la boucle locale pour ne pas innonder le réseau si les switchs ne sont pas optimisés pour le multicast (ex: [IGMP Snooping](https://fr.wikipedia.org/wiki/IGMP_snooping)).
 
 ```bash
-$ ip route add 239.0.0.0/24 dev lo src 127.0.0.1
+# ip route add 239.0.0.0/24 dev lo src 127.0.0.1
 ```
 
-Pour vérifier les routes
+Pour vérifier les routes des cartes réseau :
+
+```bash
+$ route
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+default         lan.home        0.0.0.0         UG    202    0        0 eth0
+192.168.1.0     0.0.0.0         255.255.255.0   U     202    0        0 eth0
+239.0.0.0       0.0.0.0         255.255.255.0   U     0      0        0 lo
+```
+
+ou
 
 ```bash
 $ ip route show
@@ -33,11 +44,11 @@ default via 192.168.1.1 dev eth0 src 192.168.1.74 metric 202
 239.0.0.0/24 dev lo scope link src 127.0.0.1
 ```
 
-## Applicatifs
+## Applications
 
 ### dvblast
 
-On aura besoin du programme `dvblast` qui a pour rôle de demultiplexer le signal de la carte tuner, et la diffuser en flux ip sur le réseau.
+`dvblast` a pour rôle de demultiplexer le signal de la carte tuner, et la diffuser en flux ip sur le réseau.
 
 Installation
 
@@ -61,6 +72,8 @@ Notes avec `dvblast`:
 - BUG avec le multicast ? (flood le réseau)
 
 ### mumudvb
+
+`mumudvb` est une évolution de `dvblast`
 
 Installation
 
@@ -96,15 +109,15 @@ $ ffmpeg 2>&1 | head -1
 ffmpeg version 4.3.4-0+deb11u1+rpt3 Copyright (c) 2000-2021 the FFmpeg developers
 ```
 
-## Enregistrer localement
+## Enregistrer localement un flux
 
-avec ffmpeg
+avec `ffmpeg`
 
 ```bash
 ffmpeg -i rtp://239.0.0.83:1234 -c copy rec.ts
 ```
 
-avec multicat (dépendance bitstram, se compile facilement)
+avec `multicat` (dépendance `bitstream`, se compile facilement)
 
 - https://github.com/videolan/multicat
 - https://github.com/videolan/bitstream
@@ -124,3 +137,4 @@ multicat 239.0.0.83@1234 -X /dev/null > rec.ts
 - https://aerogus.net/posts/diffuser-tele-radio-reseau-local/
 - https://www.hospitableit.com/howto/streaming-dvb-t-over-an-ip-network-using-mumudvb-on-a-raspberry-pi-3/
 - https://chiliproject.tetaneutral.net/projects/tetaneutral/wiki/Streaming_de_cha%C3%AEnes_TNT_sur_un_r%C3%A9seau_local
+- [https://www.youtube.com/@TallPaulTech](Tall Paul Tech)
