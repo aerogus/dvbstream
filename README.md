@@ -8,14 +8,6 @@ Test avec 2 outils: `dvblast` et `mumudvb`
 
 Dans les répertoires `conf/dvblast` et `conf/mumudvb` se trouvent la configuration des multiplex disponibles sur Paris avec une adresse de diffusion multicast pour chaque chaîne.
 
-## Monitoring réseau
-
-L'outil `iptraf` permet d'avoir une vue d'ensemble du trafic réseau.
-
-```bash
-$ apt install iptraf
-```
-
 ## Configuration réseau
 
 On va d'abord restreindre la plage d'ip multicast à la boucle locale pour ne pas innonder le réseau si les switchs ne sont pas optimisés pour le multicast (ex: [IGMP Snooping](https://fr.wikipedia.org/wiki/IGMP_snooping)).
@@ -130,12 +122,33 @@ Pour commencer le stream d'un multiplex, utiliser l'une des commandes exemples s
 
 Lien: [Documentation sur Systemd](https://www.linuxtricks.fr/wiki/systemd-0-table-des-matieres-des-articles)
 
+## Monitoring réseau
+
+On peut contrôler qu'un multiplex est bien streamé sur la boucle locale avec `netstat` :
+
+```bash
+$ netstat -nu
+Active Internet connections (w/o servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State
+udp        0      0 127.0.0.1:41809         239.0.0.14:1234         ESTABLISHED
+udp        0      0 127.0.0.1:52565         239.0.0.3:1234          ESTABLISHED
+udp        0      0 127.0.0.1:39327         239.0.0.2:1234          ESTABLISHED
+udp        0      0 127.0.0.1:45600         239.0.0.27:1234         ESTABLISHED
+udp        0      0 127.0.0.1:37410         239.0.0.30:1234         ESTABLISHED
+```
+
+D'autre part, l'outil `iptraf` permet d'avoir une vue d'ensemble du trafic réseau dans une interface texte.
+
+```bash
+$ apt install iptraf
+```
+
 ## Enregistrer localement un flux
 
 avec `ffmpeg`
 
 ```bash
-ffmpeg -i rtp://239.0.0.83:1234 -c copy rec.ts
+ffmpeg -i rtp://239.0.0.2:1234 -c copy rec.ts
 ```
 
 avec `multicat` (dépendance `bitstream`, se compile facilement)
@@ -144,14 +157,15 @@ avec `multicat` (dépendance `bitstream`, se compile facilement)
 - https://github.com/videolan/bitstream
 
 ```bash
-multicat 239.0.0.83@1234 -X /dev/null > rec.ts
+multicat -X @239.0.0.2:1234 /dev/null 2>/dev/null > rec.ts
 ```
 
-## Divers
-
-Ça stream tous les flux du fichier, même si aucun abonné au groupe multicast
-
-à > 50000 kbps le raspberry pi 3+ fait des pertes de paquets sur le réseau
+- On demande à ce que le flux ts passe par la sortie standard `-X`
+- On précise le groupe multicast auquel on veut s'abonner `@239.0.0.2:1234`
+- On ne veut pas d'écriture du flux sur disque `/dev/null`
+- On cache la sortie d'erreur `2>/dev/null`
+- On pipe ou on redirige le flux d'ailleurs `> rec.ts`
+- Si c'est un flux udp (pas rtp), ajouter `-u`
 
 ## Ressources
 
