@@ -109,6 +109,27 @@ $ ffmpeg 2>&1 | head -1
 ffmpeg version 4.3.4-0+deb11u1+rpt3 Copyright (c) 2000-2021 the FFmpeg developers
 ```
 
+## Streamer un multiplex
+
+Dans le répertoire `systemd` sont fournis 2 fichiers de services. Copions les au bon endroit :
+
+```bash
+# cp systemd/dvblast@.service /etc/systemd/system
+# cp systemd/mumudvb@.service /etc/systemd/system
+# systemctl daemon-reload
+```
+
+Note: le chemin des apps et des logs peut être à adapter.
+
+Pour commencer le stream d'un multiplex, utiliser l'une des commandes exemples suivantes :
+
+```bash
+# systemctl start mumudvb@r1
+# systemctl enable --now dvblast@r15
+```
+
+Lien: [Documentation sur Systemd](https://www.linuxtricks.fr/wiki/systemd-0-table-des-matieres-des-articles)
+
 ## Enregistrer localement un flux
 
 avec `ffmpeg`
