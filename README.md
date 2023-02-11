@@ -167,6 +167,44 @@ multicat -X @239.0.0.2:1234 /dev/null 2>/dev/null > rec.ts
 - On pipe ou on redirige le flux d'ailleurs `> rec.ts`
 - Si c'est un flux udp (pas rtp), ajouter `-u`
 
+## Multicast vers Unicast
+
+Dans le cas d'un réseau non compatible multicast et pour éviter le flood, il peut être intéressant de convertir le flux multicast en unicast.
+Attention à la volumétrie réseau si beaucoup de clients de connectent sur la source.
+
+Installation de `udpxy`
+
+```bash
+git clone  https://github.com/pcherenkov/udpxy
+cd udpxy/chipmunk
+make
+sudo make install
+```
+
+Lancement du service
+
+```bash
+sudo udpxy -p 4444
+```
+
+vérification que le service tourne :
+
+```bash
+$ netstat -a| grep 4444
+tcp        0      0 0.0.0.0:4444            0.0.0.0:*               LISTEN
+```
+
+Maintenant, sur notre réseau local on va pouvoir demander, en unicast et en tcp, via le protocole http, une requête de ce genre :
+
+```bash
+vlc http://dvbt:4444/rtp/239.0.0.2:1234
+```
+
+- `dvbt` étant l'ip/le host de la machine faisant tourner `udpxy`
+- `4444` le port utilisé par `udpxy`
+- `/rtp/` ou `/udp/` suivant le procole de stream utilisé par la source
+- `239.0.0.2:1234` l'ip et le port du groupe multicast source
+
 ## Ressources
 
 - https://aerogus.net/posts/diffuser-tele-radio-reseau-local/
