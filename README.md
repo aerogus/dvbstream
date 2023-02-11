@@ -137,4 +137,4 @@ multicat 239.0.0.83@1234 -X /dev/null > rec.ts
 - https://aerogus.net/posts/diffuser-tele-radio-reseau-local/
 - https://www.hospitableit.com/howto/streaming-dvb-t-over-an-ip-network-using-mumudvb-on-a-raspberry-pi-3/
 - https://chiliproject.tetaneutral.net/projects/tetaneutral/wiki/Streaming_de_cha%C3%AEnes_TNT_sur_un_r%C3%A9seau_local
-- [https://www.youtube.com/@TallPaulTech](Tall Paul Tech)
+- [Tall Paul Tech](https://www.youtube.com/@TallPaulTech)
