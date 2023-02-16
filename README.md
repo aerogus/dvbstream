@@ -73,13 +73,14 @@ Installation
 $ apt install mumudvb
 ```
 
-Ajouter le nouvel utilisateur `_mumudvb` au groupe `video`
+Ajouter le nouvel utilisateur `_mumudvb` aux groupes `video` et `plugdev`
 
 ```bash
 usermod -a -G video _mumudvb
+usermod -a -G plugdev _mumudvb
 ```
 
-Marche mieux que `dvblast` ? 
+`udp` par défaut. pour `rtp` utiliser `rtp_header` à `1` dans la conf.
 
 avec `autoconfiguration=full` ça marche mais l'ensemble des service_id flood le réseau ...
 si pids est précisé et autoconfiguration à 0, ça ne floode plus ? mais maintenance des pids à faire ...
@@ -116,9 +117,14 @@ Note: le chemin des apps et des logs peut être à adapter.
 Pour commencer le stream d'un multiplex, utiliser l'une des commandes exemples suivantes :
 
 ```bash
-# systemctl start mumudvb@r1
-# systemctl enable --now dvblast@r15
+# systemctl start mumudvb@0_r1
+# systemctl enable --now dvblast@1_r15
 ```
+
+le paramètre est de la forme CARD_MUX :
+
+- CARD l'identifiant de la carte (0 ... 7)
+- MUX l'identifiant du multiplex (r1 ... r15)
 
 Lien: [Documentation sur Systemd](https://www.linuxtricks.fr/wiki/systemd-0-table-des-matieres-des-articles)
 
@@ -211,3 +217,4 @@ vlc http://dvbt:4444/rtp/239.0.0.2:1234
 - https://www.hospitableit.com/howto/streaming-dvb-t-over-an-ip-network-using-mumudvb-on-a-raspberry-pi-3/
 - https://chiliproject.tetaneutral.net/projects/tetaneutral/wiki/Streaming_de_cha%C3%AEnes_TNT_sur_un_r%C3%A9seau_local
 - [Tall Paul Tech](https://www.youtube.com/@TallPaulTech)
+- [Fichier de conf MuMuDVB](https://mumudvb.net/documentation/asciidoc/mumudvb-2.0.0/README_CONF.html)
