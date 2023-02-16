@@ -3,13 +3,14 @@
 ##
 # Lancement de diffusion d'un multiplex avec dvblast
 #
-# @param string $1 nom du multplex
+# @param string $1 CARD_MUX
 #
 # source: https://aerogus.net/posts/diffuser-tele-radio-reseau-local/
 ##
 
 ABS_PATH="$( cd "$(dirname "$0")" || return; pwd -P )"
 CONF_PATH="${ABS_PATH}/conf/dvblast"
+ALLOWED_CARDS=(0 1 2 3 4 5 6 7)
 ALLOWED_MUXES=(r1 r2 r3 r4 r6 r7 r15 hevc)
 
 if [[ ! $(command -v dvblast) ]]; then
@@ -19,31 +20,43 @@ if [[ ! $(command -v dvblast) ]]; then
 fi
 
 if [[ $# -lt 1 ]]; then
-  echo "paramètre mux manquant";
-  echo "usage: ./dvblast.sh r1"
+  echo "paramètre card_mux manquant";
+  echo "usage: ./dvblast.sh 0_r1"
+  echo " 0 = le numéro de l'adaptateur sdr"
+  echo "r1 = le nom du multiplex"
   exit 1;
 fi
 
-if ! echo "${ALLOWED_MUXES[@]}" | grep -q "$1"; then
-  echo "mux $1 non autorisé"
+CARD=${1:0:1}
+MUX=${1#*_}
+
+if ! echo "${ALLOWED_CARDS[@]}" | grep -q "$CARD"; then
+  echo "card $CARD non autorisé"
+  echo "cards autorisées: "
+  echo "${ALLOWED_CARDS[@]}"
+  exit 1;
+fi
+
+if ! echo "${ALLOWED_MUXES[@]}" | grep -q "$MUX"; then
+  echo "mux $MUX non autorisé"
   echo "muxes autorisés: "
   echo "${ALLOWED_MUXES[@]}"
   exit 1;
 fi
 
-if [[ ! -f "${CONF_PATH}/$1.conf" ]]; then
-  echo "fichier ${CONF_PATH}/$1.conf manquant";
+if [[ ! -f "${CONF_PATH}/$MUX.conf" ]]; then
+  echo "fichier ${CONF_PATH}/$MUX.conf manquant";
   exit 1;
 fi
 
 case $1 in
-    r1) dvblast -f 586000000 -c "${CONF_PATH}/$1.conf" ;;
-    r2) dvblast -f 506000000 -c "${CONF_PATH}/$1.conf" ;;
-    r3) dvblast -f 482000000 -c "${CONF_PATH}/$1.conf" ;;
-    r4) dvblast -f 546000000 -c "${CONF_PATH}/$1.conf" ;;
-    r6) dvblast -f 562000000 -c "${CONF_PATH}/$1.conf" ;;
-    r7) dvblast -f 642000000 -c "${CONF_PATH}/$1.conf" ;;
-   r15) dvblast -f 530000000 -c "${CONF_PATH}/$1.conf" ;;
-  hevc) dvblast -f 498000000 -c "${CONF_PATH}/$1.conf" -u --delsys DVBT2 ;;
+    r1) dvblast --adapter "$CARD" --frequency 586000000 -config-file "${CONF_PATH}/$MUX.conf" ;;
+    r2) dvblast --adapter "$CARD" --frequency 506000000 -config-file "${CONF_PATH}/$MUX.conf" ;;
+    r3) dvblast --adapter "$CARD" --frequency 482000000 -config-file "${CONF_PATH}/$MUX.conf" ;;
+    r4) dvblast --adapter "$CARD" --frequency 546000000 -config-file "${CONF_PATH}/$MUX.conf" ;;
+    r6) dvblast --adapter "$CARD" --frequency 562000000 -config-file "${CONF_PATH}/$MUX.conf" ;;
+    r7) dvblast --adapter "$CARD" --frequency 642000000 -config-file "${CONF_PATH}/$MUX.conf" ;;
+   r15) dvblast --adapter "$CARD" --frequency 530000000 -config-file "${CONF_PATH}/$MUX.conf" ;;
+  hevc) dvblast --adapter "$CARD" --frequency 498000000 -config-file "${CONF_PATH}/$MUX.conf" -u --delsys DVBT2 ;;
      *) echo "mux inconnu" ;;
 esac
