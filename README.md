@@ -13,7 +13,7 @@ Dans les répertoires `conf/dvblast` et `conf/mumudvb` se trouvent la configurat
 On va d'abord restreindre la plage d'ip multicast à la boucle locale pour ne pas innonder le réseau si les switchs ne sont pas optimisés pour le multicast (ex: [IGMP Snooping](https://fr.wikipedia.org/wiki/IGMP_snooping)).
 
 ```bash
-# ip route add 239.0.0.0/24 dev lo src 127.0.0.1
+ip route add 239.0.0.0/24 dev lo src 127.0.0.1
 ```
 
 Pour vérifier les routes des cartes réseau :
@@ -57,11 +57,10 @@ DVBlast 3.4 (release)
 
 Notes avec `dvblast`:
 
-- rtp par défaut
+- `rtp` par défaut
 - `--ttl 0` ne marche pas.
 - `/ifindex=1` ne marche pas
 - `/ifaddr=127.0.0.1` ne marche pas
-- BUG avec le multicast ? (flood le réseau)
 
 ### mumudvb
 
@@ -80,10 +79,7 @@ usermod -a -G video _mumudvb
 usermod -a -G plugdev _mumudvb
 ```
 
-`udp` par défaut. pour `rtp` utiliser `rtp_header` à `1` dans la conf.
-
-avec `autoconfiguration=full` ça marche mais l'ensemble des service_id flood le réseau ...
-si pids est précisé et autoconfiguration à 0, ça ne floode plus ? mais maintenance des pids à faire ...
+`udp` par défaut. pour `rtp` utiliser `rtp_header` à `1` dans la [configuration](https://mumudvb.net/documentation/asciidoc/mumudvb-2.0.0/README_CONF.html).
 
 ### ffmpeg
 
@@ -107,9 +103,9 @@ ffmpeg version 4.3.4-0+deb11u1+rpt3 Copyright (c) 2000-2021 the FFmpeg developer
 Dans le répertoire `systemd` sont fournis 2 fichiers de services. Copions les au bon endroit :
 
 ```bash
-# cp systemd/dvblast@.service /etc/systemd/system
-# cp systemd/mumudvb@.service /etc/systemd/system
-# systemctl daemon-reload
+cp systemd/dvblast@.service /etc/systemd/system
+cp systemd/mumudvb@.service /etc/systemd/system
+systemctl daemon-reload
 ```
 
 Note: le chemin des apps et des logs peut être à adapter.
@@ -117,14 +113,14 @@ Note: le chemin des apps et des logs peut être à adapter.
 Pour commencer le stream d'un multiplex, utiliser l'une des commandes exemples suivantes :
 
 ```bash
-# systemctl start mumudvb@0_r1
-# systemctl enable --now dvblast@1_r15
+systemctl start mumudvb@0_r1
+systemctl enable --now dvblast@1_r15
 ```
 
-le paramètre est de la forme CARD_MUX :
+le paramètre est de la forme `CARD_MUX` :
 
-- CARD l'identifiant de la carte (0 ... 7)
-- MUX l'identifiant du multiplex (r1 ... r15)
+- `CARD` l'identifiant de la carte (0 ... 7)
+- `MUX` l'identifiant du multiplex (r1 ... r15)
 
 Lien: [Documentation sur Systemd](https://www.linuxtricks.fr/wiki/systemd-0-table-des-matieres-des-articles)
 
@@ -142,6 +138,8 @@ udp        0      0 127.0.0.1:39327         239.0.0.2:1234          ESTABLISHED
 udp        0      0 127.0.0.1:45600         239.0.0.27:1234         ESTABLISHED
 udp        0      0 127.0.0.1:37410         239.0.0.30:1234         ESTABLISHED
 ```
+
+Note: avec `mumudvb` il n'y a pas le même résultat du netstat ...
 
 D'autre part, l'outil `iptraf` permet d'avoir une vue d'ensemble du trafic réseau dans une interface texte.
 
@@ -217,4 +215,3 @@ vlc http://dvbt:4444/rtp/239.0.0.2:1234
 - https://www.hospitableit.com/howto/streaming-dvb-t-over-an-ip-network-using-mumudvb-on-a-raspberry-pi-3/
 - https://chiliproject.tetaneutral.net/projects/tetaneutral/wiki/Streaming_de_cha%C3%AEnes_TNT_sur_un_r%C3%A9seau_local
 - [Tall Paul Tech](https://www.youtube.com/@TallPaulTech)
-- [Fichier de conf MuMuDVB](https://mumudvb.net/documentation/asciidoc/mumudvb-2.0.0/README_CONF.html)
