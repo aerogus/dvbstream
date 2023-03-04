@@ -179,7 +179,7 @@ Attention à la volumétrie réseau si beaucoup de clients de connectent sur la 
 Installation de `udpxy`
 
 ```bash
-git clone  https://github.com/pcherenkov/udpxy
+git clone https://github.com/pcherenkov/udpxy
 cd udpxy/chipmunk
 make
 sudo make install
@@ -188,26 +188,27 @@ sudo make install
 Lancement du service
 
 ```bash
-sudo udpxy -p 4444
+sudo udpxy -p 80
 ```
 
 vérification que le service tourne :
 
 ```bash
-$ netstat -a| grep 4444
-tcp        0      0 0.0.0.0:4444            0.0.0.0:*               LISTEN
+$ netstat -an| grep ":80"
+tcp        0      0 0.0.0.0:80            0.0.0.0:*               LISTEN
 ```
 
 Maintenant, sur notre réseau local on va pouvoir demander, en unicast et en tcp, via le protocole http, une requête de ce genre :
 
 ```bash
-vlc http://dvbt:4444/rtp/239.0.0.2:1234
+vlc http://dvbstream/rtp/239.0.0.2:1234
 ```
 
-- `dvbt` étant l'ip/le host de la machine faisant tourner `udpxy`
-- `4444` le port utilisé par `udpxy`
+- `dvbstream` étant l'ip/le host de la machine faisant tourner `udpxy`
 - `/rtp/` ou `/udp/` suivant le procole de stream utilisé par la source
 - `239.0.0.2:1234` l'ip et le port du groupe multicast source
+
+Voici la [playlist.m3u](playlist.m3u) complète
 
 ## Ressources
 

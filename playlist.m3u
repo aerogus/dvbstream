@@ -1,0 +1,79 @@
+#EXTM3U
+#EXTINF:-1, TF1 (R6)
+http://dvbstream/rtp/239.0.0.1:1234
+#EXTINF:-1, France 2 (R1)
+http://dvbstream/rtp/239.0.0.2:1234
+#EXTINF:-1, France 3  Paris Ile-de-France (R1)
+http://dvbstream/rtp/239.0.0.3:1234
+#EXTINF:-1, Canal+ (R3) (Crypté)
+http://dvbstream/rtp/239.0.0.4:1234
+#EXTINF:-1, France 5 (R4)
+http://dvbstream/rtp/239.0.0.5:1234
+#EXTINF:-1, M6 (R4)
+http://dvbstream/rtp/239.0.0.6:1234
+#EXTINF:-1, Arte (R4)
+http://dvbstream/rtp/239.0.0.7:1234
+#EXTINF:-1, C8 (R2)
+http://dvbstream/rtp/239.0.0.8:1234
+#EXTINF:-1, W9 (R4)
+http://dvbstream/rtp/239.0.0.9:1234
+#EXTINF:-1, TMC (R6)
+http://dvbstream/rtp/239.0.0.10:1234
+#EXTINF:-1, TFX (R6)
+http://dvbstream/rtp/239.0.0.11:1234
+#EXTINF:-1, NRJ12 (R6)
+http://dvbstream/rtp/239.0.0.12:1234
+#EXTINF:-1, LCP / Public Sénat (R6)
+http://dvbstream/rtp/239.0.0.13:1234
+#EXTINF:-1, France 4 (R1)
+http://dvbstream/rtp/239.0.0.14:1234
+#EXTINF:-1, BFM TV (R2)
+http://dvbstream/rtp/239.0.0.15:1234
+#EXTINF:-1, CNews (R2)
+http://dvbstream/rtp/239.0.0.16:1234
+#EXTINF:-1, CStar (R2)
+http://dvbstream/rtp/239.0.0.17:1234
+#EXTINF:-1, Gulli (R2)
+http://dvbstream/rtp/239.0.0.18:1234
+#EXTINF:-1, TF1 Séries Films (R7)
+http://dvbstream/rtp/239.0.0.20:1234
+#EXTINF:-1, L'Équipe (R7)
+http://dvbstream/rtp/239.0.0.21:1234
+#EXTINF:-1, 6ter (R4)
+http://dvbstream/rtp/239.0.0.22:1234
+#EXTINF:-1, RMC Story (R7)
+http://dvbstream/rtp/239.0.0.23:1234
+#EXTINF:-1, RMC Découverte (R7)
+http://dvbstream/rtp/239.0.0.24:1234
+#EXTINF:-1, Chérie 25 (R7)
+http://dvbstream/rtp/239.0.0.25:1234
+#EXTINF:-1, LCI (R3)
+http://dvbstream/rtp/239.0.0.26:1234
+#EXTINF:-1, franceinfo: (R1)
+http://dvbstream/rtp/239.0.0.27:1234
+#EXTINF:-1, BFM Paris (R1)
+http://dvbstream/rtp/239.0.0.30:1234
+#EXTINF:-1, Canal 31 (R15)
+http://dvbstream/rtp/239.0.0.31:1234
+#EXTINF:-1, IDF1 (R15)
+http://dvbstream/rtp/239.0.0.32:1234
+#EXTINF:-1, France 24 (R15)
+http://dvbstream/rtp/239.0.0.33:1234
+#EXTINF:-1, Museum Paris (R15)
+http://dvbstream/rtp/239.0.0.34:1234
+#EXTINF:-1, Paris Première (R3) (Crypté)
+http://dvbstream/rtp/239.0.0.41:1234
+#EXTINF:-1, Canal+ Sport (R3) (Crypté)
+http://dvbstream/rtp/239.0.0.42:1234
+#EXTINF:-1, Canal+ Cinéma (R3) (Crypté)
+http://dvbstream/rtp/239.0.0.43:1234
+#EXTINF:-1, Planète+ (R3) (Crypté)
+http://dvbstream/rtp/239.0.0.45:1234
+#EXTINF:-1, Canal+ (R3) (Crypté)
+http://dvbstream/rtp/239.0.0.46:1234
+#EXTINF:-1, Test UHD1 (HEVC)
+http://dvbstream/rtp/239.0.0.81:1234
+#EXTINF:-1, Test UHD2 (HEVC)
+http://dvbstream/rtp/239.0.0.82:1234
+#EXTINF:-1, Test UHD3 (HEVC)
+http://dvbstream/rtp/239.0.0.83:1234
