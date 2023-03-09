@@ -1,6 +1,6 @@
 # dvbstream
 
-Objectif: capter localement la télévision TNT avec une Raspberry Pi munie du ([tuner DVB-T2 TV HAT](https://www.raspberrypi.com/products/raspberry-pi-tv-hat/))
+Objectif: capter localement la télévision TNT avec une Raspberry Pi munie d'un [tuner DVB-T2 TV HAT](https://www.raspberrypi.com/products/raspberry-pi-tv-hat/) et/ou de clés RTL-SDR.
 
 Test avec 2 outils: `dvblast` et `mumudvb`
 
@@ -176,7 +176,7 @@ multicat -X @239.0.0.2:1234 /dev/null 2>/dev/null > rec.ts
 ## Multicast vers Unicast
 
 Dans le cas d'un réseau non compatible multicast et pour éviter le flood, il peut être intéressant de convertir le flux multicast en unicast.
-Attention à la volumétrie réseau si beaucoup de clients de connectent sur la source.
+Attention cependant à la volumétrie réseau si beaucoup de clients de connectent sur la source.
 
 Installation de `udpxy`
 
@@ -190,8 +190,10 @@ sudo make install
 Lancement du service
 
 ```bash
-sudo udpxy -p 80
+sudo udpxy -p 80 -c 8
 ```
+
+Le service tournera sur le port 80 (`-p`) , avec un maximum de 8 clients (`-c`).
 
 vérification que le service tourne :
 
@@ -210,7 +212,79 @@ vlc http://dvbstream/rtp/239.0.0.2:1234
 - `/rtp/` ou `/udp/` suivant le procole de stream utilisé par la source
 - `239.0.0.2:1234` l'ip et le port du groupe multicast source
 
-Voici la [playlist.m3u](playlist.m3u) complète
+Voici la [playlist.m3u](playlist.m3u) complète de toute les chaînes déclarées dans ce projet (ensemble des multiplex TNT parisiens).
+
+## Générer une mosaïque
+
+Exemple de mosaïque muette avec positionnement des fenêtes en 2x2
+
+```bash
+mpv http://dvbt01.local/rtp/239.0.0.2:1234 --mute=yes --no-border --geometry=960x540+0+0 --deinterlace=yes &
+mpv http://dvbt01.local/rtp/239.0.0.27:1234 --mute=yes --no-border --geometry=960x540+960+0 --deinterlace=yes &
+mpv http://dvbt02.local/rtp/239.0.0.10:1234 --mute=yes --no-border --geometry=960x540+0+540 --deinterlace=yes &
+mpv http://dvbt02.local/rtp/239.0.0.11:1234 --mute=yes --no-border --geometry=960x540+960+540 --deinterlace=yes &
+```
+
+## Architecture globale
+
+### Raspberry Pi n°1
+
+- mux r1 (hat)
+  - 24.8 Mb/s : https://www.digitalbitrate.com/dtv.php?mux=r1,idf&liste=1&live=1
+  - `sudo systemctl enable --now dvblast@0_r1`
+- mux r2 (sdr)
+  - 24.8 Mb/s : https://www.digitalbitrate.com/dtv.php?mux=r2&liste=1&live=1
+  - `sudo systemctl enable --now dvblast@1_r2`
+- mux r3 (sdr)
+  - 24.8 Mb/s : https://www.digitalbitrate.com/dtv.php?mux=r3&liste=1&live=1
+  - `sudo systemctl enable --now dvblast@2_r3`
+
+Total : 74.4 Mb/s
+
+### Raspberry Pi n°2
+
+- mux r4 (hat)
+  - 24.8 Mb/s : https://www.digitalbitrate.com/dtv.php?mux=r4&liste=1&live=1
+  - `sudo systemctl enable --now dvblast@0_r4`
+- mux r6 (sdr)
+  - 24.8 Mb/s : https://www.digitalbitrate.com/dtv.php?mux=r6&liste=1&live=1
+  - `sudo systemctl enable --now dvblast@1_r6`
+- mux r7 (sdr)
+  - 24.8 Mb/s : https://www.digitalbitrate.com/dtv.php?mux=r7&liste=1&live=1
+  - `sudo systemctl enable --now dvblast@2_r7`
+
+Total : 74.4 Mb/s
+
+### Raspberry Pi n°3
+
+- mux hevc (hat)
+  - 34 Mb/s : https://www.digitalbitrate.com/dtv.php?mux=HEVC&liste=1&live=1
+  - `sudo systemctl enable --now dvblast@0_hevc`
+- mux r15  (sdr)
+  - 16 Mb/s : https://www.digitalbitrate.com/dtv.php?mux=r15&liste=1&live=1
+  - `sudo systemctl enable --now dvblast@0_r15`
+
+Total : 50 Mb/s
+
+## Liste des tuners
+
+Le répertoire `/dev/dvb` doit au moins contenir un `adapter` :
+
+```bash
+$ ll /dev/dvb/
+total 0
+drwxr-xr-x 2 root root 120 Mar  8 22:41 adapter0
+drwxr-xr-x 2 root root 120 Mar  8 22:41 adapter1
+drwxr-xr-x 2 root root 100 Mar  8 22:41 adapter2
+```
+
+Visualisation de 2 clés RTL-SDR branchées en USB :
+
+```bash
+$ lsusb | grep RTL
+Bus 001 Device 004: ID 0bda:2838 Realtek Semiconductor Corp. RTL2838 DVB-T
+Bus 001 Device 005: ID 0bda:2838 Realtek Semiconductor Corp. RTL2838 DVB-T
+```
 
 ## Ressources
 
