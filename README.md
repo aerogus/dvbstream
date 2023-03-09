@@ -1,12 +1,12 @@
 # dvbstream
 
-Objectif: capter localement la télévision TNT avec une Raspberry Pi munie d'un [tuner DVB-T2 TV HAT](https://www.raspberrypi.com/products/raspberry-pi-tv-hat/) et/ou de clés RTL-SDR.
+Objectif: capter localement la télévision TNT avec une Raspberry Pi munie d'un [tuner DVB-T2 TV HAT](https://www.raspberrypi.com/products/raspberry-pi-tv-hat/) et/ou de [clés RTL-SDR](https://www.passion-radio.fr/cles-rtl-sdr/rtlsdr-tcxo-472.html).
 
 Test avec 2 outils: `dvblast` et `mumudvb`
 
 ## Multiplex
 
-Dans les répertoires `conf/dvblast` et `conf/mumudvb` se trouvent la configuration des multiplex disponibles sur Paris avec une adresse de diffusion multicast pour chaque chaîne.
+Dans les répertoires `conf/dvblast` et `conf/mumudvb` se trouvent la configuration des multiplex TNT disponibles sur Paris avec une adresse de diffusion multicast pour chaque chaîne.
 
 ## Configuration réseau
 
@@ -16,7 +16,7 @@ On va d'abord restreindre la plage d'ip multicast à la boucle locale pour ne pa
 ip route add 239.0.0.0/24 dev lo src 127.0.0.1
 ```
 
-Pour vérifier les routes des cartes réseau :
+Puis pour vérifier les routes des cartes réseau :
 
 ```bash
 $ route
@@ -36,13 +36,13 @@ default via 192.168.1.1 dev eth0 src 192.168.1.74 metric 202
 239.0.0.0/24 dev lo scope link src 127.0.0.1
 ```
 
-Pour rendre cette règle persistante, on peut ajouter le script [local-multicast](conf/if-up.d/local-multicast) dans le répertoire `/etc/network/if-up.d`.
+Pour rendre cette règle persistante sous `Debian`, on peut ajouter le script [local-multicast](conf/if-up.d/local-multicast) dans le répertoire `/etc/network/if-up.d`.
 
 ## Applications
 
 ### dvblast
 
-`dvblast` a pour rôle de demultiplexer le signal de la carte tuner, et la diffuser en flux ip sur le réseau.
+`dvblast` a pour rôle de demultiplexer le signal de la carte tuner, et la diffuser en flux ip sur le réseau, en `rtp` par défaut.
 
 Installation
 
@@ -56,13 +56,6 @@ Vérification
 $ dvblast --version
 DVBlast 3.4 (release)
 ```
-
-Notes avec `dvblast`:
-
-- `rtp` par défaut
-- `--ttl 0` ne marche pas.
-- `/ifindex=1` ne marche pas
-- `/ifaddr=127.0.0.1` ne marche pas
 
 ### mumudvb
 
@@ -187,7 +180,7 @@ make
 sudo make install
 ```
 
-Lancement du service
+Lancement manuel du service :
 
 ```bash
 sudo udpxy -p 80 -c 8
@@ -195,7 +188,17 @@ sudo udpxy -p 80 -c 8
 
 Le service tournera sur le port 80 (`-p`) , avec un maximum de 8 clients (`-c`).
 
-vérification que le service tourne :
+Lancement via systemd :
+
+Voici également un [fichier de service systemd](conf/systemd/udpxy.service) pour udpxy.
+
+```bash
+cp conf/systemd/udpxy.service /etc/systemd/system
+systemctl daemon-reload
+sudo systemctl enable --now udpxy
+```
+
+Vérification que le service tourne :
 
 ```bash
 $ netstat -an| grep ":80"
