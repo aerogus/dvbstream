@@ -1,0 +1,13 @@
+[Unit]
+Description=udpxy
+After=multi-user.target
+
+[Service]
+Type=simple
+User=root
+Restart=always
+RestartSec=10
+ExecStart=/usr/local/bin/udpxy -T -p 80 -c 8 >> /var/log/udpxy.log 2>&1
+
+[Install]
+WantedBy=multi-user.target

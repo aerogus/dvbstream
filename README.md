@@ -36,6 +36,8 @@ default via 192.168.1.1 dev eth0 src 192.168.1.74 metric 202
 239.0.0.0/24 dev lo scope link src 127.0.0.1
 ```
 
+Pour rendre cette règle persistante, on peut ajouter le script [local-multicast](conf/if-up.d/local-multicast) dans le répertoire `/etc/network/if-up.d`.
+
 ## Applications
 
 ### dvblast

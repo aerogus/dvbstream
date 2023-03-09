@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# à mettre dans /etc/network/if-up.d/local-multicast (rendre exécutable)
+# le multicast ne sort pas de la boucle locale pour éviter de flooder le réseau
+
+if [ "$IFACE" = "lo" ]; then
+  ip route add 239.0.0.0/24 dev lo src 127.0.0.1
+fi
