@@ -219,13 +219,13 @@ Voici la [playlist.m3u](playlist.m3u) complète de toute les chaînes déclarée
 
 ## Générer une mosaïque
 
-Exemple de mosaïque muette avec positionnement des fenêtes en 2x2
+Exemple de mosaïque muette avec positionnement des fenêtes en 2x2 sur un écran 1920x1080:
 
 ```bash
-mpv http://dvbt01.local/rtp/239.0.0.2:1234 --mute=yes --no-border --geometry=960x540+0+0 --deinterlace=yes &
-mpv http://dvbt01.local/rtp/239.0.0.27:1234 --mute=yes --no-border --geometry=960x540+960+0 --deinterlace=yes &
-mpv http://dvbt02.local/rtp/239.0.0.10:1234 --mute=yes --no-border --geometry=960x540+0+540 --deinterlace=yes &
-mpv http://dvbt02.local/rtp/239.0.0.11:1234 --mute=yes --no-border --geometry=960x540+960+540 --deinterlace=yes &
+mpv http://dvbstream/rtp/239.0.0.2:1234  --mute=yes --no-border --geometry=960x540+0+0     --deinterlace=yes &
+mpv http://dvbstream/rtp/239.0.0.27:1234 --mute=yes --no-border --geometry=960x540+960+0   --deinterlace=yes &
+mpv http://dvbstream/rtp/239.0.0.10:1234 --mute=yes --no-border --geometry=960x540+0+540   --deinterlace=yes &
+mpv http://dvbstream/rtp/239.0.0.11:1234 --mute=yes --no-border --geometry=960x540+960+540 --deinterlace=yes &
 ```
 
 ## Architecture globale
