@@ -38,6 +38,18 @@ default via 192.168.1.1 dev eth0 src 192.168.1.74 metric 202
 
 Pour rendre cette règle persistante sous `Debian`, on peut ajouter le script [local-multicast](conf/if-up.d/local-multicast) dans le répertoire `/etc/network/if-up.d`.
 
+Sous `CentOS7`, créer un fichier `/etc/sysconfig/network-scripts/route-lo` avec le contenu suivant :
+
+```bash
+239.0.0.0/24 via 127.0.0.1 dev lo
+```
+
+puis redémarrer le service réseau
+
+```bash
+systemctl restart network
+```
+
 ## Applications
 
 ### dvblast
