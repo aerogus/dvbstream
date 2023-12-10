@@ -75,9 +75,3 @@ http://dvbstream/rtp/239.0.0.46:1234
 http://dvbstream/rtp/239.0.0.52:1234
 #EXTINF:-1, France 3 UHD (R9)
 http://dvbstream/rtp/239.0.0.53:1234
-#EXTINF:-1, Test UHD1 (HEVC)
-http://dvbstream/rtp/239.0.0.81:1234
-#EXTINF:-1, Test UHD2 (HEVC)
-http://dvbstream/rtp/239.0.0.82:1234
-#EXTINF:-1, Test UHD3 (HEVC)
-http://dvbstream/rtp/239.0.0.83:1234

@@ -11,7 +11,7 @@
 ABS_PATH="$( cd "$(dirname "$0")" || return; pwd -P )"
 CONF_PATH="${ABS_PATH}/conf/dvblast"
 ALLOWED_CARDS=(0 1 2 3 4 5 6 7)
-ALLOWED_MUXES=(r1 r2 r3 r4 r6 r7 r15 hevc)
+ALLOWED_MUXES=(r1 r2 r3 r4 r6 r7 r15)
 
 if [[ ! $(command -v dvblast) ]]; then
   echo "commande dvblast manquante";
@@ -58,6 +58,5 @@ case $MUX in
     r7) dvblast --adapter "$CARD" --frequency 642000000 --config-file "${CONF_PATH}/$MUX.conf" ;;
     r9) dvblast --adapter "$CARD" --frequency 498000000 --config-file "${CONF_PATH}/$MUX.conf" -u --delsys DVBT2 ;;
    r15) dvblast --adapter "$CARD" --frequency 530000000 --config-file "${CONF_PATH}/$MUX.conf" ;;
-  hevc) dvblast --adapter "$CARD" --frequency 498000000 --config-file "${CONF_PATH}/$MUX.conf" -u --delsys DVBT2 ;;
      *) echo "mux inconnu" ;;
 esac

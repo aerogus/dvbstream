@@ -289,9 +289,9 @@ Total : 74.4 Mb/s
 
 ### Raspberry Pi n°3
 
-- mux hevc (hat)
-  - 34 Mb/s : https://www.digitalbitrate.com/dtv.php?mux=HEVC&liste=1&live=1
-  - `sudo systemctl enable --now dvblast@0_hevc`
+- mux r9 (hat)
+  - 34 Mb/s : https://www.digitalbitrate.com/dtv.php?mux=r9&liste=1&live=1
+  - `sudo systemctl enable --now dvblast@0_r9`
 - mux r15  (sdr)
   - 16 Mb/s : https://www.digitalbitrate.com/dtv.php?mux=r15&liste=1&live=1
   - `sudo systemctl enable --now dvblast@0_r15`
