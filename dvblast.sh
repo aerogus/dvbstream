@@ -56,6 +56,7 @@ case $MUX in
     r4) dvblast --adapter "$CARD" --frequency 546000000 --config-file "${CONF_PATH}/$MUX.conf" ;;
     r6) dvblast --adapter "$CARD" --frequency 562000000 --config-file "${CONF_PATH}/$MUX.conf" ;;
     r7) dvblast --adapter "$CARD" --frequency 642000000 --config-file "${CONF_PATH}/$MUX.conf" ;;
+    r9) dvblast --adapter "$CARD" --frequency 498000000 --config-file "${CONF_PATH}/$MUX.conf" -u --delsys DVBT2 ;;
    r15) dvblast --adapter "$CARD" --frequency 530000000 --config-file "${CONF_PATH}/$MUX.conf" ;;
   hevc) dvblast --adapter "$CARD" --frequency 498000000 --config-file "${CONF_PATH}/$MUX.conf" -u --delsys DVBT2 ;;
      *) echo "mux inconnu" ;;

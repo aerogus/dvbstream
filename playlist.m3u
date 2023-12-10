@@ -71,6 +71,10 @@ http://dvbstream/rtp/239.0.0.43:1234
 http://dvbstream/rtp/239.0.0.45:1234
 #EXTINF:-1, Canal+ (R3) (Crypté)
 http://dvbstream/rtp/239.0.0.46:1234
+#EXTINF:-1, France 2 UHD (R9)
+http://dvbstream/rtp/239.0.0.52:1234
+#EXTINF:-1, France 3 UHD (R9)
+http://dvbstream/rtp/239.0.0.53:1234
 #EXTINF:-1, Test UHD1 (HEVC)
 http://dvbstream/rtp/239.0.0.81:1234
 #EXTINF:-1, Test UHD2 (HEVC)

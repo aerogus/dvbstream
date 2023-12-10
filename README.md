@@ -2,15 +2,15 @@
 
 Objectif: capter localement la télévision TNT avec une Raspberry Pi munie d'un [tuner DVB-T2 TV HAT](https://www.raspberrypi.com/products/raspberry-pi-tv-hat/) et/ou de [clés RTL-SDR](https://www.passion-radio.fr/cles-rtl-sdr/rtlsdr-tcxo-472.html).
 
-Test avec 2 outils: `dvblast` et `mumudvb`
+Test avec 2 outils: `dvblast` et `mumudvb`.
 
 ## Multiplex
 
-Dans les répertoires `conf/dvblast` et `conf/mumudvb` se trouvent la configuration des multiplex TNT disponibles sur Paris avec une adresse de diffusion multicast pour chaque chaîne.
+Dans les répertoires `conf/dvblast` et `conf/mumudvb` se trouvent les configurations des multiplex TNT disponibles sur Paris avec une adresse de diffusion multicast pour chaque chaîne.
 
 ## Configuration réseau
 
-On va d'abord restreindre la plage d'ip multicast à la boucle locale pour ne pas innonder le réseau si les switchs ne sont pas optimisés pour le multicast (ex: [IGMP Snooping](https://fr.wikipedia.org/wiki/IGMP_snooping)).
+On va d'abord restreindre la plage d'ip multicast à la boucle locale pour ne pas innonder le réseau si les switchs ne sont pas optimisés pour le multicast (cf. [IGMP Snooping](https://fr.wikipedia.org/wiki/IGMP_snooping)).
 
 ```bash
 ip route add 239.0.0.0/24 dev lo src 127.0.0.1
@@ -27,6 +27,8 @@ default         lan.home        0.0.0.0         UG    202    0        0 eth0
 239.0.0.0       0.0.0.0         255.255.255.0   U     0      0        0 lo
 ```
 
+Note: la commande `route` fait parti du paquet `net-tools` sous `Debian`.
+
 ou
 
 ```bash
@@ -36,9 +38,22 @@ default via 192.168.1.1 dev eth0 src 192.168.1.74 metric 202
 239.0.0.0/24 dev lo scope link src 127.0.0.1
 ```
 
-Pour rendre cette règle persistante sous `Debian`, on peut ajouter le script [local-multicast](conf/if-up.d/local-multicast) dans le répertoire `/etc/network/if-up.d`.
+Pour rendre cette règle persistante :
 
-Sous `CentOS7`, créer un fichier `/etc/sysconfig/network-scripts/route-lo` avec le contenu suivant :
+- sous `Debian` créer le fichier `/etc/network/if-up.d/local-multicast` (et le rendre exécutable) avec le contenu suivant :
+
+```bash
+#!/bin/sh
+
+# à mettre dans /etc/network/if-up.d/local-multicast (rendre exécutable)
+# le multicast ne sort pas de la boucle locale pour éviter de flooder le réseau
+
+if [ "$IFACE" = "lo" ]; then
+  ip route add 239.0.0.0/24 dev lo src 127.0.0.1
+fi
+```
+
+- Sous `CentOS7` créer un fichier `/etc/sysconfig/network-scripts/route-lo` avec le contenu suivant :
 
 ```bash
 239.0.0.0/24 via 127.0.0.1 dev lo
@@ -54,12 +69,12 @@ systemctl restart network
 
 ### dvblast
 
-`dvblast` a pour rôle de demultiplexer le signal de la carte tuner, et la diffuser en flux ip sur le réseau, en `rtp` par défaut.
+`dvblast` a pour rôle de demultiplexer le signal de la carte tuner, et diffuser un flux ip sur le réseau, en `rtp` par défaut.
 
 Installation
 
 ```bash
-$ apt install dvblast
+apt install dvblast
 ```
 
 Vérification
@@ -76,7 +91,7 @@ DVBlast 3.4 (release)
 Installation
 
 ```bash
-$ apt install mumudvb
+apt install mumudvb
 ```
 
 Ajouter le nouvel utilisateur `_mumudvb` aux groupes `video` et `plugdev`
@@ -151,7 +166,7 @@ Note: avec `mumudvb` il n'y a pas le même résultat du netstat ...
 D'autre part, l'outil `iptraf` permet d'avoir une vue d'ensemble du trafic réseau dans une interface texte.
 
 ```bash
-$ apt install iptraf
+apt install iptraf
 ```
 
 ## Enregistrer localement un flux
@@ -159,10 +174,10 @@ $ apt install iptraf
 avec `ffmpeg`
 
 ```bash
-ffmpeg -i rtp://239.0.0.2:1234 -c copy rec.ts
+ffmpeg -i rtp://239.0.0.2:1234 -c copy -map 0 rec.ts
 ```
 
-avec `multicat` (dépendance `bitstream`, se compile facilement)
+ou encore mieux avec `multicat` (dépendance `bitstream`, se compile facilement)
 
 - https://github.com/videolan/multicat
 - https://github.com/videolan/bitstream
@@ -171,12 +186,14 @@ avec `multicat` (dépendance `bitstream`, se compile facilement)
 multicat -X @239.0.0.2:1234 /dev/null 2>/dev/null > rec.ts
 ```
 
-- On demande à ce que le flux ts passe par la sortie standard `-X`
-- On précise le groupe multicast auquel on veut s'abonner `@239.0.0.2:1234`
-- On ne veut pas d'écriture du flux sur disque `/dev/null`
-- On cache la sortie d'erreur `2>/dev/null`
-- On pipe ou on redirige le flux d'ailleurs `> rec.ts`
-- Si c'est un flux udp (pas rtp), ajouter `-u`
+Description des paramètres :
+
+- `-X` : on demande à ce que le flux ts passe par la sortie standard
+- `@239.0.0.2:1234` : on précise le groupe multicast auquel on veut s'abonner
+- `/dev/null` : on ne veut pas d'écriture du flux sur disque
+- `2>/dev/null` : on cache la sortie d'erreur
+- `-u` à ajouter si le flux est `udp` "brut" et pas `rtp`
+- `> rec.ts` : on redirige le flux vers un fichier
 
 ## Multicast vers Unicast
 
@@ -200,7 +217,7 @@ sudo udpxy -p 80 -c 8
 
 Le service tournera sur le port 80 (`-p`) , avec un maximum de 8 clients (`-c`).
 
-Lancement via systemd :
+Lancement via `systemd` :
 
 Voici également un [fichier de service systemd](conf/systemd/udpxy.service) pour udpxy.
 
@@ -229,7 +246,7 @@ vlc http://dvbstream/rtp/239.0.0.2:1234
 
 Voici la [playlist.m3u](playlist.m3u) complète de toute les chaînes déclarées dans ce projet (ensemble des multiplex TNT parisiens).
 
-## Générer une mosaïque
+## Bonus: générer une mosaïque de chaînes
 
 Exemple de mosaïque muette avec positionnement des fenêtes en 2x2 sur un écran 1920x1080:
 
