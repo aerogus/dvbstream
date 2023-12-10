@@ -55,11 +55,9 @@ http://dvbstream/rtp/239.0.0.27:1234
 http://dvbstream/rtp/239.0.0.30:1234
 #EXTINF:-1, Canal 31 (R15)
 http://dvbstream/rtp/239.0.0.31:1234
-#EXTINF:-1, IDF1 (R15)
+#EXTINF:-1, 20 minutes TV (R15)
 http://dvbstream/rtp/239.0.0.32:1234
-#EXTINF:-1, France 24 (R15)
-http://dvbstream/rtp/239.0.0.33:1234
-#EXTINF:-1, Museum Paris (R15)
+#EXTINF:-1, Le Figaro TV IDF (R15)
 http://dvbstream/rtp/239.0.0.34:1234
 #EXTINF:-1, Paris Première (R3) (Crypté)
 http://dvbstream/rtp/239.0.0.41:1234
