@@ -7,7 +7,7 @@ Type=simple
 User=pi
 Restart=always
 RestartSec=10
-ExecStart=/bin/bash -c '/home/pi/workspace/dvbstream/dvblast.sh %i >> /home/pi/workspace/dvbstream/log/dvblast-%i.log 2>&1'
+ExecStart=/bin/bash -c '/home/pi/workspace/dvbstream/dvblast.sh %I >> /home/pi/workspace/dvbstream/log/dvblast-%I.log 2>&1'
 
 [Install]
 WantedBy=multi-user.target
