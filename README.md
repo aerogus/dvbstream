@@ -298,6 +298,12 @@ Total : 74.4 Mb/s
 
 Total : 50 Mb/s
 
+### Photos
+
+![Vue de devant](img/archi-front.jpg)
+
+![Vue du haut](img/archi-top.jpg)
+
 ## Liste des tuners
 
 Le répertoire `/dev/dvb` doit au moins contenir un `adapter` :
