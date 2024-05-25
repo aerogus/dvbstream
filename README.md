@@ -13,7 +13,7 @@ Dans les répertoires `conf/dvblast` et `conf/mumudvb` se trouvent les configura
 On va d'abord restreindre la plage d'ip multicast à la boucle locale pour ne pas innonder le réseau si les switchs ne sont pas optimisés pour le multicast (cf. [IGMP Snooping](https://fr.wikipedia.org/wiki/IGMP_snooping)).
 
 ```bash
-ip route add 239.0.0.0/24 dev lo src 127.0.0.1
+ip route add 239.10.10.0/24 dev lo src 127.0.0.1
 ```
 
 Puis pour vérifier les routes des cartes réseau :
@@ -24,7 +24,7 @@ Kernel IP routing table
 Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 default         lan.home        0.0.0.0         UG    202    0        0 eth0
 192.168.1.0     0.0.0.0         255.255.255.0   U     202    0        0 eth0
-239.0.0.0       0.0.0.0         255.255.255.0   U     0      0        0 lo
+239.10.10.0       0.0.0.0         255.255.255.0   U     0      0        0 lo
 ```
 
 Note: la commande `route` fait parti du paquet `net-tools` sous `Debian`.
@@ -35,7 +35,7 @@ ou
 $ ip route show
 default via 192.168.1.1 dev eth0 src 192.168.1.74 metric 202
 192.168.1.0/24 dev eth0 proto dhcp scope link src 192.168.1.74 metric 202
-239.0.0.0/24 dev lo scope link src 127.0.0.1
+239.10.10.0/24 dev lo scope link src 127.0.0.1
 ```
 
 Pour rendre cette règle persistante :
@@ -49,14 +49,14 @@ Pour rendre cette règle persistante :
 # le multicast ne sort pas de la boucle locale pour éviter de flooder le réseau
 
 if [ "$IFACE" = "lo" ]; then
-  ip route add 239.0.0.0/24 dev lo src 127.0.0.1
+  ip route add 239.10.10.0/24 dev lo src 127.0.0.1
 fi
 ```
 
 - Sous `CentOS7` créer un fichier `/etc/sysconfig/network-scripts/route-lo` avec le contenu suivant :
 
 ```bash
-239.0.0.0/24 via 127.0.0.1 dev lo
+239.10.10.0/24 via 127.0.0.1 dev lo
 ```
 
 puis redémarrer le service réseau
@@ -154,11 +154,11 @@ On peut contrôler qu'un multiplex est bien streamé sur la boucle locale avec `
 $ netstat -nu
 Active Internet connections (w/o servers)
 Proto Recv-Q Send-Q Local Address           Foreign Address         State
-udp        0      0 127.0.0.1:41809         239.0.0.14:1234         ESTABLISHED
-udp        0      0 127.0.0.1:52565         239.0.0.3:1234          ESTABLISHED
-udp        0      0 127.0.0.1:39327         239.0.0.2:1234          ESTABLISHED
-udp        0      0 127.0.0.1:45600         239.0.0.27:1234         ESTABLISHED
-udp        0      0 127.0.0.1:37410         239.0.0.30:1234         ESTABLISHED
+udp        0      0 127.0.0.1:41809         239.10.10.14:1234         ESTABLISHED
+udp        0      0 127.0.0.1:52565         239.10.10.3:1234          ESTABLISHED
+udp        0      0 127.0.0.1:39327         239.10.10.2:1234          ESTABLISHED
+udp        0      0 127.0.0.1:45600         239.10.10.27:1234         ESTABLISHED
+udp        0      0 127.0.0.1:37410         239.10.10.30:1234         ESTABLISHED
 ```
 
 Note: avec `mumudvb` il n'y a pas le même résultat du netstat ...
@@ -174,7 +174,7 @@ apt install iptraf
 avec `ffmpeg`
 
 ```bash
-ffmpeg -i rtp://239.0.0.2:1234 -c copy -map 0 rec.ts
+ffmpeg -i rtp://239.10.10.2:1234 -c copy -map 0 rec.ts
 ```
 
 ou encore mieux avec `multicat` (dépendance `bitstream`, se compile facilement)
@@ -183,13 +183,13 @@ ou encore mieux avec `multicat` (dépendance `bitstream`, se compile facilement)
 - https://github.com/videolan/bitstream
 
 ```bash
-multicat -X @239.0.0.2:1234 /dev/null 2>/dev/null > rec.ts
+multicat -X @239.10.10.2:1234 /dev/null 2>/dev/null > rec.ts
 ```
 
 Description des paramètres :
 
 - `-X` : on demande à ce que le flux ts passe par la sortie standard
-- `@239.0.0.2:1234` : on précise le groupe multicast auquel on veut s'abonner
+- `@239.10.10.2:1234` : on précise le groupe multicast auquel on veut s'abonner
 - `/dev/null` : on ne veut pas d'écriture du flux sur disque
 - `2>/dev/null` : on cache la sortie d'erreur
 - `-u` à ajouter si le flux est `udp` "brut" et pas `rtp`
@@ -237,12 +237,12 @@ tcp        0      0 0.0.0.0:80            0.0.0.0:*               LISTEN
 Maintenant, sur notre réseau local on va pouvoir demander, en unicast et en tcp, via le protocole http, une requête de ce genre :
 
 ```bash
-vlc http://dvbstream/rtp/239.0.0.2:1234
+vlc http://dvbstream/rtp/239.10.10.2:1234
 ```
 
 - `dvbstream` étant l'ip/le host de la machine faisant tourner `udpxy`
 - `/rtp/` ou `/udp/` suivant le procole de stream utilisé par la source
-- `239.0.0.2:1234` l'ip et le port du groupe multicast source
+- `239.10.10.2:1234` l'ip et le port du groupe multicast source
 
 Voici la [playlist.m3u](playlist.m3u) complète de toute les chaînes déclarées dans ce projet (ensemble des multiplex TNT parisiens).
 
@@ -251,10 +251,10 @@ Voici la [playlist.m3u](playlist.m3u) complète de toute les chaînes déclarée
 Exemple de mosaïque muette avec positionnement des fenêtes en 2x2 sur un écran 1920x1080:
 
 ```bash
-mpv http://dvbstream/rtp/239.0.0.2:1234  --mute=yes --no-border --geometry=960x540+0+0     --deinterlace=yes &
-mpv http://dvbstream/rtp/239.0.0.27:1234 --mute=yes --no-border --geometry=960x540+960+0   --deinterlace=yes &
-mpv http://dvbstream/rtp/239.0.0.10:1234 --mute=yes --no-border --geometry=960x540+0+540   --deinterlace=yes &
-mpv http://dvbstream/rtp/239.0.0.11:1234 --mute=yes --no-border --geometry=960x540+960+540 --deinterlace=yes &
+mpv http://dvbstream/rtp/239.10.10.2:1234  --mute=yes --no-border --geometry=960x540+0+0     --deinterlace=yes &
+mpv http://dvbstream/rtp/239.10.10.27:1234 --mute=yes --no-border --geometry=960x540+960+0   --deinterlace=yes &
+mpv http://dvbstream/rtp/239.10.10.10:1234 --mute=yes --no-border --geometry=960x540+0+540   --deinterlace=yes &
+mpv http://dvbstream/rtp/239.10.10.11:1234 --mute=yes --no-border --geometry=960x540+960+540 --deinterlace=yes &
 ```
 
 ## Architecture globale
