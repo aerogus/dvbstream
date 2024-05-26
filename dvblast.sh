@@ -50,13 +50,13 @@ if [[ ! -f "${CONF_PATH}/$MUX.conf" ]]; then
 fi
 
 case $MUX in
-    r1) dvblast --adapter "$CARD" --frequency 586000000 --config-file "${CONF_PATH}/$MUX.conf" ;;
-    r2) dvblast --adapter "$CARD" --frequency 506000000 --config-file "${CONF_PATH}/$MUX.conf" ;;
-    r3) dvblast --adapter "$CARD" --frequency 482000000 --config-file "${CONF_PATH}/$MUX.conf" ;;
-    r4) dvblast --adapter "$CARD" --frequency 546000000 --config-file "${CONF_PATH}/$MUX.conf" ;;
-    r6) dvblast --adapter "$CARD" --frequency 562000000 --config-file "${CONF_PATH}/$MUX.conf" ;;
-    r7) dvblast --adapter "$CARD" --frequency 642000000 --config-file "${CONF_PATH}/$MUX.conf" ;;
-    r9) dvblast --adapter "$CARD" --frequency 498000000 --config-file "${CONF_PATH}/$MUX.conf" -u --delsys DVBT2 ;;
-   r15) dvblast --adapter "$CARD" --frequency 530000000 --config-file "${CONF_PATH}/$MUX.conf" ;;
+    r1) dvblast --adapter "$CARD" --frequency 586000000 --dvb-compliance --epg-passthrough --config-file "${CONF_PATH}/$MUX.conf" ;;
+    r2) dvblast --adapter "$CARD" --frequency 506000000 --dvb-compliance --epg-passthrough --config-file "${CONF_PATH}/$MUX.conf" ;;
+    r3) dvblast --adapter "$CARD" --frequency 482000000 --dvb-compliance --epg-passthrough --config-file "${CONF_PATH}/$MUX.conf" ;;
+    r4) dvblast --adapter "$CARD" --frequency 546000000 --dvb-compliance --epg-passthrough --config-file "${CONF_PATH}/$MUX.conf" ;;
+    r6) dvblast --adapter "$CARD" --frequency 562000000 --dvb-compliance --epg-passthrough --config-file "${CONF_PATH}/$MUX.conf" ;;
+    r7) dvblast --adapter "$CARD" --frequency 642000000 --dvb-compliance --epg-passthrough --config-file "${CONF_PATH}/$MUX.conf" ;;
+    r9) dvblast --adapter "$CARD" --frequency 498000000 --dvb-compliance --epg-passthrough --config-file "${CONF_PATH}/$MUX.conf" -u --delsys DVBT2 ;;
+   r15) dvblast --adapter "$CARD" --frequency 530000000 --dvb-compliance --epg-passthrough --config-file "${CONF_PATH}/$MUX.conf" ;;
      *) echo "mux inconnu" ;;
 esac
