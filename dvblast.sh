@@ -63,4 +63,4 @@ if [[ $MUX == "r9" ]]; then
   EXTRA='-u --delsys DVBT2'
 fi
 
-dvblast --remote-socket "/tmp/dvblast-$CARD-$MUX.sock" --adapter "$CARD" --frequency "${FREQS[$MUX]}" --dvb-compliance --epg-passthrough --config-file "${CONF_PATH}/$MUX.conf" $EXTRA
+dvblast --remote-socket "/tmp/dvblast-$CARD-$MUX.sock" --adapter "$CARD" --frequency "${FREQS[$MUX]}" --any-type --dvb-compliance --epg-passthrough --config-file "${CONF_PATH}/$MUX.conf" $EXTRA
