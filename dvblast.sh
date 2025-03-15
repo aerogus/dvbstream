@@ -11,18 +11,28 @@
 ABS_PATH="$( cd "$(dirname "$0")" || return; pwd -P )"
 CONF_PATH="${ABS_PATH}/conf/dvblast"
 ALLOWED_CARDS=(0 1 2 3 4 5 6 7)
-ALLOWED_MUXES=(r1 r2 r3 r4 r6 r7 r9 r15)
+
+# correspondance mux/fréquence
+declare -A FREQS=(
+  ["r1"]=586000000
+  ["r2"]=506000000
+  ["r3"]=482000000
+  ["r4"]=546000000
+  ["r6"]=562000000
+  ["r7"]=642000000
+  ["r9"]=498000000
+  ["r15"]=530000000
+)
 
 if [[ ! $(command -v dvblast) ]]; then
   echo "commande dvblast manquante";
-  echo "apt install dvblast"
   exit 1;
 fi
 
 if [[ $# -lt 1 ]]; then
   echo "paramètre card_mux manquant";
   echo "usage: ./dvblast.sh 0_r1"
-  echo " 0 = le numéro de l'adaptateur sdr"
+  echo " 0 = le numéro de l'adaptateur"
   echo "r1 = le nom du multiplex"
   exit 1;
 fi
@@ -37,11 +47,9 @@ if ! echo "${ALLOWED_CARDS[@]}" | grep -q "$CARD"; then
   exit 1;
 fi
 
-if ! echo "${ALLOWED_MUXES[@]}" | grep -q "$MUX"; then
-  echo "mux $MUX non autorisé"
-  echo "muxes autorisés: "
-  echo "${ALLOWED_MUXES[@]}"
-  exit 1;
+if [[ ! -v "FREQS[$MUX]" ]]; then
+  echo "mux $MUX inconnu"
+  exit 1
 fi
 
 if [[ ! -f "${CONF_PATH}/$MUX.conf" ]]; then
@@ -49,14 +57,10 @@ if [[ ! -f "${CONF_PATH}/$MUX.conf" ]]; then
   exit 1;
 fi
 
-case $MUX in
-    r1) dvblast --adapter "$CARD" --frequency 586000000 --dvb-compliance --epg-passthrough --config-file "${CONF_PATH}/$MUX.conf" ;;
-    r2) dvblast --adapter "$CARD" --frequency 506000000 --dvb-compliance --epg-passthrough --config-file "${CONF_PATH}/$MUX.conf" ;;
-    r3) dvblast --adapter "$CARD" --frequency 482000000 --dvb-compliance --epg-passthrough --config-file "${CONF_PATH}/$MUX.conf" ;;
-    r4) dvblast --adapter "$CARD" --frequency 546000000 --dvb-compliance --epg-passthrough --config-file "${CONF_PATH}/$MUX.conf" ;;
-    r6) dvblast --adapter "$CARD" --frequency 562000000 --dvb-compliance --epg-passthrough --config-file "${CONF_PATH}/$MUX.conf" ;;
-    r7) dvblast --adapter "$CARD" --frequency 642000000 --dvb-compliance --epg-passthrough --config-file "${CONF_PATH}/$MUX.conf" ;;
-    r9) dvblast --adapter "$CARD" --frequency 498000000 --dvb-compliance --epg-passthrough --config-file "${CONF_PATH}/$MUX.conf" -u --delsys DVBT2 ;;
-   r15) dvblast --adapter "$CARD" --frequency 530000000 --dvb-compliance --epg-passthrough --config-file "${CONF_PATH}/$MUX.conf" ;;
-     *) echo "mux inconnu" ;;
-esac
+# paramètres specifiques
+EXTRA=""
+if [[ $MUX == "r9" ]]; then
+  EXTRA='-u --delsys DVBT2'
+fi
+
+dvblast --remote-socket "/tmp/dvblast-$CARD-$MUX.sock" --adapter "$CARD" --frequency "${FREQS[$MUX]}" --any-type --dvb-compliance --epg-passthrough --config-file "${CONF_PATH}/$MUX.conf" $EXTRA

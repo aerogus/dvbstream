@@ -11,7 +11,6 @@
 ABS_PATH="$( cd "$(dirname "$0")" || return; pwd -P )"
 CONF_PATH="${ABS_PATH}/conf/mumudvb"
 ALLOWED_CARDS=(0 1 2 3 4 5 6 7)
-ALLOWED_MUXES=(r1 r2 r3 r4 r6 r7 r9 r15)
 
 if [[ ! $(command -v mumudvb) ]]; then
   echo "commande mumudvb manquante";
@@ -34,13 +33,6 @@ if ! echo "${ALLOWED_CARDS[@]}" | grep -q "$CARD"; then
   echo "card $CARD non autorisé"
   echo "cards autorisées: "
   echo "${ALLOWED_CARDS[@]}"
-  exit 1;
-fi
-
-if ! echo "${ALLOWED_MUXES[@]}" | grep -q "$MUX"; then
-  echo "mux $MUX non autorisé"
-  echo "muxes autorisés: "
-  echo "${ALLOWED_MUXES[@]}"
   exit 1;
 fi
 
