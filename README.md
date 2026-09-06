@@ -24,7 +24,7 @@ Kernel IP routing table
 Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 default         lan.home        0.0.0.0         UG    202    0        0 eth0
 192.168.1.0     0.0.0.0         255.255.255.0   U     202    0        0 eth0
-239.10.10.0       0.0.0.0         255.255.255.0   U     0      0        0 lo
+239.10.10.0     0.0.0.0         255.255.255.0   U     0      0        0 lo
 ```
 
 Note: la commande `route` fait parti du paquet `net-tools` sous `Debian`.
