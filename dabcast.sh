@@ -82,4 +82,4 @@ if [[ ! -f "${CONF_PATH}/$MUX.conf" ]]; then
   exit 1;
 fi
 
-echo dablast --remote-socket "/tmp/dabcast-$ADAPTER-$BLOCK.sock" -a "$ADAPTER" -f "${FREQS[$BLOCK]}" -c "${CONF_PATH}/$MUX.conf"
+dablast -a "$ADAPTER" -f "${FREQS[$BLOCK]}" -c "${CONF_PATH}/$MUX.conf"
