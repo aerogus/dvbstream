@@ -1,8 +1,11 @@
 # dvbstream
 
-Objectif: capter localement la télévision TNT avec une Raspberry Pi munie d'un [tuner DVB-T2 TV HAT](https://www.raspberrypi.com/products/raspberry-pi-tv-hat/) et/ou de [clés RTL-SDR](https://www.passion-radio.fr/cles-rtl-sdr/rtlsdr-tcxo-472.html).
+L'objectif de ce projet est multiple :
+- démultiplexer et multicaster un signal DVB-T/2 (TNT) à partir d'une Raspberry Pi munie d'un [tuner DVB-T2 TV HAT](https://www.raspberrypi.com/products/raspberry-pi-tv-hat/) et/ou de [clés RTL-SDR](https://www.passion-radio.fr/cles-rtl-sdr/rtlsdr-tcxo-472.html)
+- démultiplexer et multicaster un signal DAB+ à partir d'une clé RTL-SDR
+- démultiplexer et multicaster un signal DVBS/2 à partir d'une parabole et d'un tuner satellite
 
-Test avec 2 outils: `dvblast` et `mumudvb`.
+2 outils de diffusion: `dvblast` et `mumudvb`.
 
 ## Multiplex
 
@@ -327,6 +330,7 @@ Bus 001 Device 005: ID 0bda:2838 Realtek Semiconductor Corp. RTL2838 DVB-T
 ## Ressources
 
 - https://aerogus.net/posts/diffuser-tele-radio-reseau-local/
+- https://aerogus.net/posts/tbs5530-dvbs-linux/
 - https://www.hospitableit.com/howto/streaming-dvb-t-over-an-ip-network-using-mumudvb-on-a-raspberry-pi-3/
 - https://chiliproject.tetaneutral.net/projects/tetaneutral/wiki/Streaming_de_cha%C3%AEnes_TNT_sur_un_r%C3%A9seau_local
 - [Tall Paul Tech](https://www.youtube.com/@TallPaulTech)
