@@ -62,18 +62,18 @@ fi
 
 if [[ $# -lt 1 ]]; then
   echo "paramètre adapter_localization/block manquant";
-  echo "usage: ./dablast.sh 0_paris/6A"
+  echo "usage: ./dablast.sh 0_paris-6A"
   echo " 0 = le numéro de l'adaptateur"
-  echo "paris/6A = localisation/block"
+  echo " paris-6A = localisation/block"
   exit 1;
 fi
 
 ADAPTER=${1:0:1} # 1er caractère
-MUX=${1#*_} # "zone/block"
-BLOCK=${MUX#*/}
+MUX=${1#*_} # "zone-block"
+BLOCK=${MUX#*-}
 
 if [[ ! -v "FREQS[$BLOCK]" ]]; then
-  echo "mux $MUX inconnu"
+  echo "block $BLOCK inconnu"
   exit 1
 fi
 
@@ -82,4 +82,4 @@ if [[ ! -f "${CONF_PATH}/$MUX.conf" ]]; then
   exit 1;
 fi
 
-dablast --remote-socket "/tmp/dabcast-$ADAPTER-$BLOCK.sock" -a "$ADAPTER" -f "${FREQS[$BLOCK]}" -c "${CONF_PATH}/$MUX.conf"
+echo dablast --remote-socket "/tmp/dabcast-$ADAPTER-$BLOCK.sock" -a "$ADAPTER" -f "${FREQS[$BLOCK]}" -c "${CONF_PATH}/$MUX.conf"

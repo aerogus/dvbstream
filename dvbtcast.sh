@@ -13,26 +13,26 @@ CONF_PATH="${ABS_PATH}/conf/dvbt"
 
 # correspondance mux / paramètres
 declare -A PARAMS=(
-  ["paris/r1"]="--frequency 586000000 --modulation DVBT"
-  ["paris/r2"]="--frequency 506000000 --modulation DVBT"
-  ["paris/r4"]="--frequency 546000000 --modulation DVBT"
-  ["paris/r6"]="--frequency 562000000 --modulation DVBT"
-  ["paris/r7"]="--frequency 642000000 --modulation DVBT"
-  ["paris/r9"]="--frequency 498000000 --modulation DVBT2 --budget-mode"
-  ["paris/r15"]="--frequency 530000000 --modulation DVBT"
+  ["paris-r1"]="--frequency 586000000 --modulation DVBT"
+  ["paris-r2"]="--frequency 506000000 --modulation DVBT"
+  ["paris-r4"]="--frequency 546000000 --modulation DVBT"
+  ["paris-r6"]="--frequency 562000000 --modulation DVBT"
+  ["paris-r7"]="--frequency 642000000 --modulation DVBT"
+  ["paris-r9"]="--frequency 498000000 --modulation DVBT2 --budget-mode"
+  ["paris-r15"]="--frequency 530000000 --modulation DVBT"
 )
 
 if [[ ! $(command -v dvblast) ]]; then
   echo "commande dvblast manquante";
-  #exit 1;
+  exit 1;
 fi
 
 if [[ $# -lt 1 ]]; then
-  echo "paramètre adapter_zone/mux manquant";
-  echo "usage: ./dvbtcast.sh 00_paris/r1"
+  echo "paramètre adapter_zone-mux manquant";
+  echo "usage: ./dvbtcast.sh 00_paris-r1"
   echo " 0 = le numéro de l'adaptateur"
   echo " 0 = le numéro du frontend"
-  echo " paris/r1 = zone / nom du multiplex"
+  echo " paris-r1 = zone-multiplex"
   exit 1;
 fi
 
