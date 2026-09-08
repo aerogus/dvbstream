@@ -3,7 +3,7 @@
 ##
 # Lancement de diffusion d'un multiplex DVBT/2 avec dvblast
 #
-# @param string $1 ADAPTER_ZONE/MUX
+# @param string $1 $ADAPTER$FRONTEND_$ZONE-MUX
 #
 # source: https://aerogus.net/posts/diffuser-tele-radio-reseau-local/
 ##
@@ -28,7 +28,7 @@ if [[ ! $(command -v dvblast) ]]; then
 fi
 
 if [[ $# -lt 1 ]]; then
-  echo "paramètre adapter_zone-mux manquant";
+  echo "paramètre adapterfontend_zone-mux manquant";
   echo "usage: ./dvbtcast.sh 00_paris-r1"
   echo " 0 = le numéro de l'adaptateur"
   echo " 0 = le numéro du frontend"

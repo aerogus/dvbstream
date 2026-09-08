@@ -3,9 +3,9 @@
 ##
 # Lancement de diffusion d'un multiplex DAB+ avec dablast
 #
-# @param string $1 ADAPTER_ZONE_BLOCK
+# @param string $1 ADAPTER_ZONE-BLOCK
 #
-# ./dabcast.sh 0_paris/6A
+# ./dabcast.sh 0_paris-6A
 #
 # source: https://aerogus.net/posts/diffuser-tele-radio-reseau-local/
 ##

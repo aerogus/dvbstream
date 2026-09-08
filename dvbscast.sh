@@ -3,7 +3,7 @@
 ##
 # Lancement de diffusion d'un multiplex DVBS/2 avec dvblast
 #
-# @param string $1 ADAPTER_ZONE/MUX
+# @param string $1 ADAPTER_ZONE-MUX
 #
 # source: https://aerogus.net/posts/diffuser-tele-radio-reseau-local/
 ##
