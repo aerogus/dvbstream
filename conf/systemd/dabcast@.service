@@ -1,5 +1,5 @@
 [Unit]
-Description=dabcast %I
+Description=dabcast %i
 After=multi-user.target
 
 [Service]
@@ -7,7 +7,7 @@ Type=simple
 User=gus
 Restart=always
 RestartSec=10
-ExecStart=/bin/bash -c '/opt/dvbstream/dabcast.sh %I >> /var/log/dvbstream/dabcast-%I.log 2>&1'
+ExecStart=/bin/bash -c '/opt/dvbstream/dabcast.sh %i >> /var/log/dvbstream/dabcast-%i.log 2>&1'
 
 [Install]
 WantedBy=multi-user.target

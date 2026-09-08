@@ -1,5 +1,5 @@
 [Unit]
-Description=dvbtcast %I
+Description=dvbtcast %i
 After=multi-user.target
 
 [Service]
@@ -7,7 +7,7 @@ Type=simple
 User=gus
 Restart=always
 RestartSec=10
-ExecStart=/bin/bash -c '/opt/dvbstream/dvbtcast.sh %I >> /var/log/dvbstream/dvbtcast-%I.log 2>&1'
+ExecStart=/bin/bash -c '/opt/dvbstream/dvbtcast.sh %i >> /var/log/dvbstream/dvbtcast-%i.log 2>&1'
 
 [Install]
 WantedBy=multi-user.target
